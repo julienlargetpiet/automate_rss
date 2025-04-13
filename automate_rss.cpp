@@ -22,10 +22,10 @@ int main(int argc, char* argv[]) {
 
   std::string pubDate;
   time_t cur_time;
-  time(&cur_time);
+  std::time(&cur_time);
 
   if (argc < 6) {
-    pubDate = ctime(&cur_time);
+    pubDate = std::ctime(&cur_time);
   } else {
     pubDate = argv[5];
   };
