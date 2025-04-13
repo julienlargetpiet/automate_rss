@@ -50,5 +50,9 @@ Now, run the programm
 $ ./a.out html_data.html rss_data.xml title_of_the_new_item link_to_content pubDate(optional) 
 ```
 
+>[NOTE]
+>When pubDate is not provided, it defaults to the current date
+
+
 
 
