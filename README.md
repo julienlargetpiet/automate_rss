@@ -1,6 +1,6 @@
 # automate_rss
 
-Simple C++ command line programm allowing to transform an input html content into a chosen xml file ready for RSS feed.
+Simple C++ command line programm allowing to transform an input html file and add it into a chosen xml file ready for RSS feed.
 
 ## Example
 
