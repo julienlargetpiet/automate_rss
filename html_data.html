@@ -1,0 +1,209 @@
+<div style="padding: 40px; border-style: solid; font-family: 'Courier';border-width: thin;margin-right:150px;"> 
+
+<br>
+<img src="../../static/files/compression_algo.jpg" height="200" width="350">
+<br><br>
+
+<div style="padding:15px;">
+
+<ul>
+
+<li><a href="#comp">Compression overview</a></li>
+
+<ul>
+
+<li><a href="#comp_ptrn">Recurrent patterns</a></li>
+<li><a href="#comp_lvl">Compression level</a></li>
+<li><a href="#comp_key">Compression key</a></li>
+<li><a href="#comp_key_unique">Uniqueness of compression keys</a></li>
+<li><a href="#comp_files">Output files</a></li>
+
+</ul>
+
+<li><a href="#decomp">Decompression Overview</a></li>
+
+<li><a href="#dir">On a directory</a></li>
+
+</ul>
+
+</div>
+
+<br><br>
+
+<b>I've just finished implementing a simple text compression algorithm in C++, i will talk about its implementation in this article.</b>
+<br><br>
+
+<br><br>
+
+The programm is available here <a href="https://github.com/julienlargetpiet/Simple_compression">repo</a> <br><br>
+
+Or on this website as a zip <a href="../../static/files/Simple_compression.zip">zip</a>
+
+<br><br>
+
+<h1 id="comp">Compression overview</h1>
+
+<br><br>
+
+A  function will read the file to compress and will create a <code>std::string</code> of its content.
+
+<br><br>
+
+After, it will look for recurrent patterns.
+
+<br><br><br>
+
+<hr style="border-top: dotted 1px;"><br>
+
+<h2 id="comp_ptrn">Recurrent patterns</h2>
+<br><br>
+
+A recurrent pattern as its name suggests is a sequence of character s that is present multiple times in the scaned <code>std::string</code> of the input file.
+
+<br><br>
+
+We can choose the length of the pattern to find. For example a pattern of length 2 is more commun than a pattern of length 3. In a sentence, we more often see "ou" than "oup".
+
+<br><br>
+
+<br>
+
+<hr style="border-top: dotted 1px;"><br>
+
+<h2 id="comp_lvl">Compression level</h2>
+
+<br><br>
+
+Of course, the patterns frequence are often not equal. <br><br>
+
+So, here the <code>compression level</code> parameter means how many of the top most frequent patterns i will take in count to apply the compression algorithm? <br><br>
+
+<br>
+
+<hr style="border-top: dotted 1px;"><br>
+
+<h2 id="comp_key">Compression key</h2>
+
+<br><br>
+
+The whole point of a compression algorithm is to replace the most frequen patterns taken in count with a <b>unique pattern</b> that have a lower length. For example "ou" can be replaced by "^" or "$" but there is no point in replacing it with "^$" or "$$" because the replacing patterns are of the same length of the pattern to replace.
+
+<br><br>
+
+The set of the compression key characters must bee out of the characters set used for writing input text. If we work with <code>ASCII</code> table only, we must keep in mind to choose the most unfrequent characters for the compression keys like <code>^<>$;[]-\\*</code>.
+
+<br><br>
+
+The input text must not contain these characters.
+
+<br><br>
+
+<br>
+
+<hr style="border-top: dotted 1px;"><br>
+
+<h2 id="comp_key_unique">Uniqueness of compression keys</h2>
+
+<br><br>
+
+So i've made an algorithm in the programm called <code>nb_to_letter()</code> that takes a number as input and returns an associated <code>std::string</code>. The output is different for all different inputs. For example with the set "abcd":
+
+<ul>
+
+<li>input 1 -> "a"</li>
+
+<li>input 2 -> "b"</li>
+
+<li>...</li>
+
+<li>input 5 -> "aa"</li>
+
+<li>input 6 -> "ab"</li>
+
+<li>...</li>
+
+</ul>
+
+<br><br>
+
+Choosing the length of the most frequent patterns to find is crucial. Indeed, the lower it is, the more "chances" we have to find some in a text, but from a certain value of <code>compression level</code>, it will begin to generate same length compression key, which is pointless. <br><br>
+
+If we choose a greater length for the most frequent pattern to find, we have less "chances" to find a lot of different patterns to compress, but on those we found, we can apply a greater compression level, which will compress more data. <br><br>
+
+<br>
+
+<hr style="border-top: dotted 1px;"><br>
+
+<h2 id="comp_files">Out files</h2>
+<br><br>
+
+There are 2 outputed files by the compression function. <br><br>
+
+The first file is the compressed data itself.
+
+<br><br>
+
+The last file is the compression key file, where the compression key of the most frequent pattern to find is at the top, and it decreases at the bottom. The number of keys is linked to the compression level. If we choose a compression level of 4, we'll have 4 compression keys.
+
+<br><br>
+
+To find if the compression has been correctly done we can add the size of these files: <br><br>
+
+To find their size:
+
+<br><br>
+
+<code>$ wc -c compressed_data.txt</code>
+
+<br><br>
+
+<code>$ wc -c keys.txt</code>
+
+<br><br>
+
+And compare it to the pre-compressed file: <br><br>
+
+<code>$ wc -c pre_compressed_file.txt</code>
+
+<br><br>
+
+<br>
+
+<hr style="border-top: dotted 1px;"><br>
+
+<h1 id="decomp">Decompresssion Overview</h1>
+
+<br><br>
+
+The decompression function will read the compression key file from bottom to top and begin to replace the compression key in compressed data from most unfrequent pattern to most frequent pattern.
+
+<br><br><br>
+
+<hr style="border-top: dotted 1px;"><br>
+
+<h1 id="dir">On directory</h1> 
+
+<br><br>
+
+The same method is applied to compress an entire directory. 
+
+<br><br>
+
+The main diference is that all the compression keys for all the files are again stored inside a single file, but to differenciate each file, a special character is added to distinguish them. I've chosen "*".
+
+<br><br>
+
+The same goes for the compresed data.
+
+<br><br>
+
+Last, i've reimplemented the <code>tree</code> algorithm to list files recursively during compression and store them. The algo is available here <a href="../../static/files/mirador.zip">zip</a> or here <a href="https://github.com/julienlargetpiet/mirador">repo</a>.
+
+<br><br>
+
+The path of each file is stored at the end of the compression key file.
+
+<br><br>
+
+
+</div>

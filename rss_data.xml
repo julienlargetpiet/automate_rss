@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding = "UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <item>
+      <title>test post5</title>
+      <link>https://julienlargetpiet.tech</link>
+      <description>&lt;b&gt;teste description2&lt;/b&gt; &lt;br&gt;
+      &lt;img src="https://julienlargetpiet.tech/static/files/ev_ui2.png"&gt;
+      </description>
+    </item>
+  </channel>
+</rss>
+
+
+
