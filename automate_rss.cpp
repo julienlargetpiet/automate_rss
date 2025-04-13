@@ -1,5 +1,6 @@
 #include<fstream>
 #include <iostream>
+#include <ctime>
 
 int main(int argc, char* argv[]) {
 
@@ -20,9 +21,11 @@ int main(int argc, char* argv[]) {
   std::string link = argv[4];
 
   std::string pubDate;
+  time_t cur_time;
+  time(&cur_time);
 
   if (argc < 6) {
-
+    pubDate = ctime(&cur_time);
   } else {
     pubDate = argv[5];
   };
